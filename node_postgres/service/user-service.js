@@ -9,19 +9,6 @@ const tokenService = require('./token-service');
 
 class UserService{
     async  registration(email, password){
-        // const candidate = await db.query('select name from person where name = $1', [email])
-        // if (candidate) {
-        //     throw new Error('Пользователь уже существует')
-        // }
-        // const hashpassword = await bcrypt.hash(password, 3)
-        // const actovationLink = uuid.v4()
-        // const user = await UserModel.create({email, password: hashpassword, actovationLink})
-        // await mailService.sendActivationMail(email, actovationLink)
-        // const userDto = new UserDto(user)
-        // const tokens = tokenService.getTokens({...userDto})
-        // await tokenService.saveToken(userDto.id, tokens.refreshToken)
-
-        // return {...tokens, user: userDto}
 
         const candidate = await db.query('select email from myuser where email = $1', [email])
         if (candidate.rows[0]) {
@@ -30,14 +17,26 @@ class UserService{
         const hashpassword = await bcrypt.hash(password, 3)
         const actovationLink = uuid.v4()
         const user = await db.query('insert into myuser (email, pass, activationlink) values ($1, $2, $3) returning *', [email, hashpassword, actovationLink])
-        console.log(user.rows[0])
-        await mailService.sendActivationMail(email, actovationLink)
+        await mailService.sendActivationMail(email, `${process.env.API_URL}/activate/${actovationLink}`)
         const userDto = new UserDto(user.rows[0])
-        console.log(userDto)
         const tokens = tokenService.generateToken({...userDto})
         await tokenService.saveToken(userDto.id, tokens.refreshToken)
 
         return {...tokens, user: userDto}
+    }
+
+    async activate(activationLink) {
+        try{
+            const user = await db.query('select * from myuser where activationlink=$1', [activationLink])
+        if (!user.rows[0]) {
+            throw new Error ('Неккоректная ссылка активации')
+        }
+        await db.query('UPDATE myuser SET isactivated = $1 where activationlink=$2', [true, activationLink])
+      
+        }
+        catch(e){
+            console.log(e)
+        }
     }
 }
 
