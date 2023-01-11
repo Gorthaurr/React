@@ -6,13 +6,14 @@ const mailService = require('./mail-service')
 // const tokenService = require('./token-service')
 const UserDto = require('../dtos/user-dto');
 const tokenService = require('./token-service');
+const ApiError = require('../exceptions/api-error')
 
 class UserService{
     async  registration(email, password){
 
         const candidate = await db.query('select email from myuser where email = $1', [email])
         if (candidate.rows[0]) {
-            throw new Error('Пользователь уже существует')
+            throw ApiError.BadRequestError(`Пользователь с таким email(${email}) уже существует`)
         }
         const hashpassword = await bcrypt.hash(password, 3)
         const actovationLink = uuid.v4()
@@ -29,7 +30,7 @@ class UserService{
         try{
             const user = await db.query('select * from myuser where activationlink=$1', [activationLink])
         if (!user.rows[0]) {
-            throw new Error ('Неккоректная ссылка активации')
+            throw ApiError.BadRequestError('Неккоректная ссылка активации')
         }
         await db.query('UPDATE myuser SET isactivated = $1 where activationlink=$2', [true, activationLink])
       

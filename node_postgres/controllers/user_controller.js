@@ -25,17 +25,23 @@
 // module.exports = new UserController()
 const db = require('../db');
 const userService = require('../service/user-service')
+const {validationResult} = require('express-validator')
+const ApiError = require('../exceptions/api-error')
 
 class UserController {
     async registration(req, res, next) {
         try{
+            const errors = validationResult(req)
+            if (!errors.isEmpty()) {
+                return next(ApiError.BadRequestError('Ошибка валидации', errors.array()))
+            }
             const {email, password} = req.body;
             const userData = await userService.registration(email, password)
             res.cookie('refreshToken', userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true})
             return res.json(userData)
         }
         catch(e){
-            console.log(e)
+            next(e);
         }
     }
 
@@ -44,7 +50,7 @@ class UserController {
             
         }
         catch(e){
-
+            next(e);
         }
     }
 
@@ -53,7 +59,7 @@ class UserController {
 
         }
         catch(e){
-
+            next(e);
         }
     }
 
@@ -65,7 +71,7 @@ class UserController {
             
         }
         catch(e){
-            console.log(e)
+            next(e);
         }
     }
 
@@ -74,27 +80,17 @@ class UserController {
 
         }
         catch(e){
-
+            next(e);
         }
     }
 
     async getUsers(req, res, next) {
-        // var email = 'sadasdasdasdas'
-        // try{
-        //     const candidate = await db.query('select email from myuser where email = $1', [email])
-        // if (candidate.rows[0]) {
-        //     console.log(candidate.rows[0])
-        //     throw new Error('Пользователь уже существует')
-        // }
-        // const hashpassword = await bcrypt.hash(password, 3)
-        // const actovationLink = uuid.v4()
-        // const user = await db.query('insert into myuser (email, pass, activationlink) values ($1, $2, $3) returning email, pass, activationlink', [email, hashpassword, actovationLink])
-            
-        // }
-        // catch(e){         
-        //      console.log(e)
-        //     // res.json(all.rows[0])
-        // }
+        try{
+
+        }
+        catch(e){
+            next(e);
+        }
     }
 }
 
