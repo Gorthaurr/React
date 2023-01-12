@@ -13,7 +13,7 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(cors())
 app.use('/', router)
-app.use(errorMiddleware)
+app.use(errorMiddleware)// обязательно подключать последним
 // app.use('/api', userRouter)
 
 

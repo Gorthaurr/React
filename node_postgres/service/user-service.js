@@ -20,7 +20,7 @@ class UserService{
         const user = await db.query('insert into myuser (email, pass, activationlink) values ($1, $2, $3) returning *', [email, hashpassword, actovationLink])
         await mailService.sendActivationMail(email, `${process.env.API_URL}/activate/${actovationLink}`)
         const userDto = new UserDto(user.rows[0])
-        const tokens = tokenService.generateToken({...userDto})
+        const tokens = tokenService.generateTokens({...userDto})
         await tokenService.saveToken(userDto.id, tokens.refreshToken)
 
         return {...tokens, user: userDto}
@@ -38,6 +38,49 @@ class UserService{
         catch(e){
             console.log(e)
         }
+    }
+
+    async login(email, password) {
+        const user = await db.query('select * from myuser where email = $1', [email])
+        if (!user.rows[0]){
+            throw ApiError.BadRequestError('Пользователь не был найден')
+        }
+        const isPassEquals = await bcrypt.compare(password, user.rows[0].pass)
+        if (!isPassEquals){
+            throw ApiError.BadRequestError('Пользователь с таким password не найден')
+        }
+
+        const userDto = new UserDto(user.rows[0])
+        const tokens = tokenService.generateTokens({...userDto})
+        await tokenService.saveToken(userDto.id, tokens.refreshToken)
+        return {...tokens, user: userDto}
+    }
+
+    async logout(refreshToken){
+        const token = await tokenService.removeRefreshToken(refreshToken)
+        return token
+    }
+
+    async refresh(refreshToken) {
+        if (!refreshToken){
+            throw ApiError.UnauthorizedError()
+        }
+        const userData = tokenService.validateRefreshToken(refreshToken)
+        const tokenFromDB = await tokenService.findToken(refreshToken)
+        if (!userData || !tokenFromDB){
+            throw ApiError.UnauthorizedError()
+        }
+        const user = await db.query('select * from myuser where id = $1', [userData.id])
+        const userDto = new UserDto(user.rows[0])
+        const tokens = tokenService.generateTokens({...userDto})
+        console.log(tokens)
+        await tokenService.saveToken(userDto.id, tokens.refreshToken)
+        return {...tokens, user: userDto}
+    }
+
+    async getAllUsers(){
+        const users = await db.query('select * from myuser')
+        return users.rows
     }
 }
 

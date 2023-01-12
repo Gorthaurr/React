@@ -27,6 +27,7 @@ const db = require('../db');
 const userService = require('../service/user-service')
 const {validationResult} = require('express-validator')
 const ApiError = require('../exceptions/api-error')
+const tokenService = require('../service/token-service');
 
 class UserController {
     async registration(req, res, next) {
@@ -34,6 +35,7 @@ class UserController {
             const errors = validationResult(req)
             if (!errors.isEmpty()) {
                 return next(ApiError.BadRequestError('Ошибка валидации', errors.array()))
+                
             }
             const {email, password} = req.body;
             const userData = await userService.registration(email, password)
@@ -47,7 +49,10 @@ class UserController {
 
     async login(req, res, next) {
         try{
-            
+            const {email, password} = req.body
+            const userData = await userService.login(email, password)
+            res.cookie('refreshToken', userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true})
+            return res.json(userData)
         }
         catch(e){
             next(e);
@@ -56,7 +61,10 @@ class UserController {
 
     async logout(req, res, next) {
         try{
-
+            const {refreshToken} = req.cookies;
+            const token = await userService.logout(refreshToken)
+            res.clearCookie('refreshToken')
+            return res.json(token)
         }
         catch(e){
             next(e);
@@ -77,7 +85,11 @@ class UserController {
 
     async refresh(req, res, next) {
         try{
-
+            const {refreshToken} = req.cookies;
+            const userData = await userService.refresh(refreshToken)
+            console.log(userData)
+            res.cookie('refreshToken', userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true})
+            return res.json(userData)
         }
         catch(e){
             next(e);
@@ -86,11 +98,22 @@ class UserController {
 
     async getUsers(req, res, next) {
         try{
-
+            const a = await userService.getAllUsers()
+            res.json(a)
         }
         catch(e){
             next(e);
         }
+    }
+
+    async test(req, res, next) {
+        const email = 'asd'
+        const user = await db.query('select * from myuser where email = $1', [email])
+        if (!user.rows[0]){
+            console.log('1')
+           return res.json(user.rows[0])
+        }
+        return res.json('asdsad')
     }
 }
 
