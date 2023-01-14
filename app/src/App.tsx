@@ -6,6 +6,7 @@ import {Context} from './index'
 import {observer} from 'mobx-react-lite'
 import { Form, Input, Button, Spin } from 'antd';
 import UserService from './service/UserService';
+import Store from './store/store';
 
 function App() {
 

@@ -1,3 +1,5 @@
+//Здесь только визуал и состояния переменных, сама логика находится в папке store
+
 import React, {useContext, useState} from 'react';
 import { Form, Input, Button } from 'antd';
 import {Context} from '../index'
@@ -8,10 +10,10 @@ import {observer} from 'mobx-react-lite'
 // }
 
 const Login: React.FC = () => {
-  const [email, setEmail]  = useState<string>('')
+  const [email, setEmail]  = useState<string>('') // строки объявления нужных переменных
   const [password, setPassword]  = useState<string>('')
-  const [form] = Form.useForm();
-  const {store} = useContext(Context)
+  const [form] = Form.useForm(); //форма из antd
+  const {store} = useContext(Context)//сам не знаю
 
 
   return (
@@ -22,7 +24,7 @@ const Login: React.FC = () => {
       >
         <Input 
           placeholder="Email" 
-          onChange={e => setEmail(e.target.value)}
+          onChange={e => setEmail(e.target.value)} 
           value={email}
           type = 'text'
         />

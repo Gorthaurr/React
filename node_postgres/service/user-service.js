@@ -45,7 +45,7 @@ class UserService{
         if (!user.rows[0]){
             throw ApiError.BadRequestError('Пользователь не был найден')
         }
-        const isPassEquals = await bcrypt.compare(password, user.rows[0].pass)
+        const isPassEquals = await bcrypt.compare(password, user.rows[0].pass)// расхеширование пароля и сравнивание
         if (!isPassEquals){
             throw ApiError.BadRequestError('Пользователь с таким password не найден')
         }
