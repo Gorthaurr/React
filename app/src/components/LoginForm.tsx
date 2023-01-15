@@ -13,7 +13,7 @@ const Login: React.FC = () => {
   const [email, setEmail]  = useState<string>('') // строки объявления нужных переменных
   const [password, setPassword]  = useState<string>('')
   const [form] = Form.useForm(); //форма из antd
-  const {store} = useContext(Context)//сам не знаю
+  const {store} = useContext(Context)//передаём контекст  класса store чтобы использовать его функции
 
 
   return (

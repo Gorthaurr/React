@@ -88,6 +88,4 @@ export default class Store {
             this.setLoading(false)
         }
     }
-
-
 }

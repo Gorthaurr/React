@@ -1,3 +1,6 @@
+// описание модели данных User т.к это не примитив
+
+
 module.exports = class UserDto{
     email
     id

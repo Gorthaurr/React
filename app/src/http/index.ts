@@ -5,13 +5,12 @@ export const API_URL = 'http://localhost:5000/'
 
 const $api = axios.create({
     withCredentials: true, //цеплять куки по запросу
-    baseURL: API_URL
-
-})
+    baseURL: API_URL 
+})// создаём инстанс axios 
 
 $api.interceptors.request.use((config: any) => {
     config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
-    return config  
+    return config   //проверка авторизации
 });
 
 $api.interceptors.request.use((config: any) => {

@@ -12,7 +12,7 @@ const store = new Store()
 
 export const Context = createContext<State>({
   store
-})
+})//Создаём контекст, чтобы передавать функционал Store в другие компоненты
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -21,7 +21,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <Context.Provider value={{store}}>
     <App />
-  </Context.Provider>
+  </Context.Provider>//оборачиваем в хук компонент app и теперь через него store будет доступен в app
   );
 
 
