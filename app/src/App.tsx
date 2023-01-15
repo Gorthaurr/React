@@ -1,17 +1,17 @@
 import React, {useEffect, useContext, useState} from 'react';
-import Header from './components/Header'
 import {IUser} from './models/IUser'
 import LoginForm from './components/LoginForm'
+import Card from './components/Card'
 import {Context} from './index'
 import {observer} from 'mobx-react-lite'
-import { Form, Input, Button, Spin } from 'antd';
+import { Button, Spin } from 'antd';
 import UserService from './service/UserService';
 import Store from './store/store';
+import GetUsers from './components/GetUsers';
 
 function App() {
 
   const {store} = useContext(Context)
-  const [users, setUsers] = useState<IUser[]>([])
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
@@ -19,15 +19,6 @@ function App() {
     }
   }, [])
 
-  async function getUsers(){
-    try{
-      const response = await UserService.fetchUsers()
-      setUsers(response.data)
-    }
-    catch(e) {
-      console.log(e)
-    }
-  }
 
   if (store.isLoading) {
     return <Spin tip="Loading"/>
@@ -37,28 +28,25 @@ function App() {
     return (
       <>
       <LoginForm/>
-      <Button type="primary" htmlType="submit" onClick={() => getUsers()}>
-          Get Users
-      </Button>
       </>
     )
   }
+
+  // if (!store.user.isActivated) {
+  //   return <h1>Активируйте аккаунт через электронную почту</h1>
+  // }
  
   return (
     <div className="App">
   
     <div>
-      <h1>{store.isAuth ? `Пользователь авторизован ${store.user.email}` : 'АВТОРИЗУЙТЕСЬ'}</h1>
-      <h1>{store.user.isActivated ? `Акаунт подтверждён` : 'Подтвердите аккаунт'}</h1>
+      {/* <h1>{store.isAuth ? `Пользователь авторизован ${store.user.email}` : 'АВТОРИЗУЙТЕСЬ'}</h1>
+      <h1>{store.user.isActivated ? `Акаунт подтверждён` : 'Подтвердите аккаунт'}</h1> */}
       <Button type="primary" htmlType="submit" onClick={() => store.logout()}>
           Logout
       </Button>
-      <Button type="primary" htmlType="submit" onClick={() => getUsers()}>
-          Get Users
-      </Button>
-      {users.map(
-        user => <div key={user.id}>{user.email}</div>
-      )}
+      <Card title='asdas' content="asdasdasd"></Card>
+      {/* <GetUsers></GetUsers> */}
     </div>
     </div>
   );
