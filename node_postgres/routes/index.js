@@ -20,6 +20,7 @@ router.get('/refresh', UserController.refresh)
 router.get('/users', authMiddleware, UserController.getUsers)
 router.get('/test', UserController.test)
 router.get('/cards', CardController.getCards)
+router.get('/cards/:id_card', CardController.getCard)
 
 
 module.exports = router

@@ -2,13 +2,14 @@ import { API_URL } from './../http/index';
 import { AuthResponse } from './../models/response/AuthResponse';
 import { IUser } from './../models/IUser';
 import { makeAutoObservable } from "mobx"
-import AuthService from '../service/AuthService';
+import AuthService from '../../../app/src/service/AuthService';
 import axios from 'axios';
 
 export default class Store {
     user = {} as IUser 
     isAuth = false
     isLoading = false
+    isClickLogin = false
 
     constructor() {
         makeAutoObservable(this)
@@ -26,6 +27,10 @@ export default class Store {
         this.isLoading = bool
     }
 
+    setClickLogin(bool: boolean) {
+        this.isClickLogin = bool
+    }
+
     async login(email: string, password: string) {
         try{
             const response = await AuthService.login(email, password)
@@ -35,7 +40,7 @@ export default class Store {
             this.setUser(response.data.user)
         }
         catch(e: any)
-        {   
+        {  
             console.log('Пошёл нахуй')
             console.log(e.reponse?.data?.message)
         }
@@ -62,6 +67,7 @@ export default class Store {
             const response = await AuthService.logout()
             localStorage.removeItem('token')
             this.setAuth(false)
+            this.setClickLogin(true)
             this.setUser({} as IUser)
         }
         catch(e: any)

@@ -1,5 +1,4 @@
 //Здесь только визуал и состояния переменных, сама логика находится в папке store
-
 import React, {useContext, useState} from 'react';
 import { Form, Input, Button } from 'antd';
 import {Context} from '../index'
@@ -40,11 +39,11 @@ const Login: React.FC = () => {
           type = 'text'
         />
       </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit" onClick={() => store.login(email, password)}>
+      <Form.Item style={{ display: "flex", justifyContent: "center" }}>
+        <Button style={{ margin: '0 10px'}} type="primary" htmlType="submit" onClick={() => store.login(email, password)}>
           Log in
         </Button>
-        <Button type="primary" htmlType="submit" onClick={() => store.registration(email, password)}>
+        <Button  style={{ margin: '0 10px'}} type="primary" htmlType="submit" onClick={() => store.registration(email, password)}>
           registration
         </Button>
       </Form.Item>

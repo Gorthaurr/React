@@ -1,5 +1,4 @@
 @import url('https://cdn.jsdelivr.net/npm/reboot.css@1.0.4/dist/reboot.min.css');
-@import 'bootstrap/dist/css/bootstrap.min.css';
 
 body {
   margin: 0;
@@ -14,4 +13,5 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
 
