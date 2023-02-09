@@ -3,7 +3,7 @@ import React, {useContext, useState} from 'react';
 import { Form, Input, Button } from 'antd';
 import {Context} from '../index'
 import {observer} from 'mobx-react-lite'
-
+import { useNavigate } from 'react-router-dom'
 // interface Props {
 //   onSubmit: (values: any) => void;
 // }
@@ -13,6 +13,7 @@ const Login: React.FC = () => {
   const [password, setPassword]  = useState<string>('')
   const [form] = Form.useForm(); //форма из antd
   const {store} = useContext(Context)//передаём контекст  класса store чтобы использовать его функции
+  const navigate = useNavigate()
 
 
   return (
@@ -40,7 +41,7 @@ const Login: React.FC = () => {
         />
       </Form.Item>
       <Form.Item style={{ display: "flex", justifyContent: "center" }}>
-        <Button style={{ margin: '0 10px'}} type="primary" htmlType="submit" onClick={() => store.login(email, password)}>
+        <Button style={{ margin: '0 10px'}} type="primary" htmlType="submit" onClick={() => {store.login(email, password)}}>
           Log in
         </Button>
         <Button  style={{ margin: '0 10px'}} type="primary" htmlType="submit" onClick={() => store.registration(email, password)}>

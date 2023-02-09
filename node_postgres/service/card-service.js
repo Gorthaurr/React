@@ -8,13 +8,21 @@ class CardService {
         return cards.rows
     }
 
-    async getCardContent(id_card) {
-        const card = await db.query('select * from card_content where id_card = $1', [id_card])
+    async getCardContent(card_id) {
+        
+        const card = await db.query('select * from card_content where card_id = $1', [card_id])
+        console.log(card_id)
         if (!card.rows) {
-            throw new ApiError.BadRequestError('Такого пользователя не существует')
+            throw new ApiError.BadRequestError('Такой карточки не существует')
         }
         return card.rows
     }
+
+    async getAllCategories() {
+        const categories = await db.query('select distinct category from card_content')
+        return categories.rows
+    }
+
 }
 
 module.exports = new CardService()

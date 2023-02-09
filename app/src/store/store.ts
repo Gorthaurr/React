@@ -1,19 +1,23 @@
+import { CardContentResponse } from './../models/response/CardContentResponse';
 import { API_URL } from './../http/index';
 import { AuthResponse } from './../models/response/AuthResponse';
 import { IUser } from './../models/IUser';
 import { makeAutoObservable } from "mobx"
 import AuthService from '../../../app/src/service/AuthService';
 import axios from 'axios';
+import CardService from '../service/CardService';
+import {Navigate} from 'react-router-dom'
+
 
 export default class Store {
     user = {} as IUser 
     isAuth = false
     isLoading = false
-    isClickLogin = false
 
     constructor() {
         makeAutoObservable(this)
     }
+
 
     setAuth(bool: boolean) {
         this.isAuth = bool  
@@ -26,18 +30,17 @@ export default class Store {
     setLoading(bool: boolean) {
         this.isLoading = bool
     }
-
-    setClickLogin(bool: boolean) {
-        this.isClickLogin = bool
-    }
-
+ 
     async login(email: string, password: string) {
+        
         try{
             const response = await AuthService.login(email, password)
-            console.log(response)
+            if (response.status === 200) {
+                window.location.href = '/'
+            }
             localStorage.setItem('token', response.data.accessToken)
             this.setAuth(true)
-            this.setUser(response.data.user)
+            this.setUser(response.data.user)    
         }
         catch(e: any)
         {  
@@ -59,22 +62,20 @@ export default class Store {
         {   
             console.log(e.reponse?.data?.message)
         }
-
     }
 
     async logout() {
         try{
             const response = await AuthService.logout()
+            window.location.href = '/auth'
             localStorage.removeItem('token')
             this.setAuth(false)
-            this.setClickLogin(true)
             this.setUser({} as IUser)
         }
         catch(e: any)
         {
             console.log(e.reponse?.data?.message)
         }
-
     }
 
     async checkAuth() {
@@ -94,4 +95,17 @@ export default class Store {
             this.setLoading(false)
         }
     }
+    
+
+    async GetCardContent(id: number) {
+        try{
+            const response = await CardService.fetchCardContent(id)     
+            window.location.href = `/card/${id}`     
+            localStorage.setItem('cardContent', JSON.stringify(response.data))         
+        }
+        catch(e: any){
+            console.log(e)
+        }
+    }
+
 }
