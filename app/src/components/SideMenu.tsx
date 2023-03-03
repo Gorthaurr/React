@@ -3,6 +3,7 @@ import { Layout, Menu } from 'antd';
 import { MenuClickEventHandler } from "rc-menu/lib/interface";
 import CardService from '../service/CardService';
 import {AllCategory} from '../models/response/AllCategory'
+import {observer} from 'mobx-react-lite'
 
 const { Sider } = Layout;
 
@@ -33,4 +34,4 @@ const SideMenu: React.FC<Props> = ({categoryes, onClickHeandler}) => {
   );
 };
 
-export default SideMenu;
+export default observer(SideMenu);

@@ -7,7 +7,7 @@ const AuthPage: FC = () => {
   return (
     <>
         <Header title="Delivery club" logoUrl='https://zenpromokod.ru/wp-content/uploads/2022/12/promokod_delivery_club.webp'></Header>
-          <LoginForm/>
+          <LoginForm />
         <Footer></Footer>
     </>
   );

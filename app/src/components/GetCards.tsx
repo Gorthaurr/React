@@ -7,6 +7,7 @@ import AppHeader from './Header'
 import CardService from '../service/CardService';
 import {Button, Row, Col, Carousel} from 'antd'
 import { CardContentResponse } from '../models/response/CardContentResponse';
+import {observer} from 'mobx-react-lite'
 
 const GetCards: React.FC = () => {
     const [cards, setCards] = useState<CardResponse[]>([])
@@ -42,4 +43,4 @@ const GetCards: React.FC = () => {
 
 }
 
-export default GetCards;
+export default observer(GetCards);

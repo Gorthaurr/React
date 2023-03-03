@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 import { Layout, Button } from 'antd';
 import {Context} from '../index'
+import {observer} from 'mobx-react-lite'
 import { useNavigate } from 'react-router-dom'
 
 
@@ -30,4 +31,4 @@ const AppHeader: React.FC<Props> = ({ title, logoUrl }) => {
 };
 
 
-export default AppHeader;
+export default observer(AppHeader);

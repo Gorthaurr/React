@@ -6,13 +6,14 @@ import { makeAutoObservable } from "mobx"
 import AuthService from '../../../app/src/service/AuthService';
 import axios from 'axios';
 import CardService from '../service/CardService';
-import {Navigate} from 'react-router-dom'
+
 
 
 export default class Store {
     user = {} as IUser 
     isAuth = false
     isLoading = false
+    
 
     constructor() {
         makeAutoObservable(this)
@@ -35,12 +36,13 @@ export default class Store {
         
         try{
             const response = await AuthService.login(email, password)
-            if (response.status === 200) {
-                window.location.href = '/'
-            }
+            // if (response.status === 200) {
+            //     window.location.href = '/'
+            // }
             localStorage.setItem('token', response.data.accessToken)
             this.setAuth(true)
-            this.setUser(response.data.user)    
+            this.setUser(response.data.user)  
+            return response.status  
         }
         catch(e: any)
         {  
@@ -66,6 +68,7 @@ export default class Store {
 
     async logout() {
         try{
+            
             const response = await AuthService.logout()
             window.location.href = '/auth'
             localStorage.removeItem('token')
@@ -107,5 +110,4 @@ export default class Store {
             console.log(e)
         }
     }
-
 }

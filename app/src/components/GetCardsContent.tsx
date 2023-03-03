@@ -2,6 +2,7 @@ import React, {useEffect, useContext, useState} from 'react';
 import Card from './Card'
 import {Button, Row, Col, Carousel} from 'antd'
 import { CardContentResponse } from '../models/response/CardContentResponse';
+import {observer} from 'mobx-react-lite'
 
 interface Props{
     cardContent: CardContentResponse[]
@@ -23,4 +24,4 @@ const GetCardsContent: React.FC<Props> = ({cardContent, onClick}) => {
     )
 }
 
-export default GetCardsContent
+export default observer(GetCardsContent);

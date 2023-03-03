@@ -34,8 +34,7 @@ const CardPage: FC = () => {
 
   function addBasket(e: any) {
     const a = visible_card_content.filter(content =>content.title === e.target.innerText)
-   
-   
+    
     const compare = (a: CardContentResponse, b: CardContentResponse) =>
       a.card_content_id === b.card_content_id &&
       a.card_id === b.card_id &&
@@ -62,7 +61,6 @@ const CardPage: FC = () => {
     
      
   }
-
   return (
     <>
         <Header title="Delivery club" logoUrl='https://zenpromokod.ru/wp-content/uploads/2022/12/promokod_delivery_club.webp'></Header>
